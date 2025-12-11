@@ -1,12 +1,16 @@
 plugins {
     id 'java'
-    id("net.serenity-bdd.serenity-gradle-plugin") version "4.2.32"
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.32'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
     mavenCentral()
 }
-
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.14.0'
@@ -19,15 +23,19 @@ dependencies {
     implementation 'net.serenity-bdd:serenity-screenplay:4.2.32'
     implementation 'net.serenity-bdd:serenity-screenplay-webdriver:4.2.32'
     implementation("org.seleniumhq.selenium:selenium-java:4.38.0")
-}
 
+    // WebDriver
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.15.0'
+    testImplementation 'org.seleniumhq.selenium:selenium-chrome-driver:4.15.0'
+    testImplementation 'org.seleniumhq.selenium:selenium-edge-driver:4.15.0'
+    testImplementation 'org.seleniumhq.selenium:selenium-firefox-driver:4.15.0'
+
+}
 
 test {
-     useJUnitPlatform()
-     finalizedBy(aggregate)
-}
+    useJUnitPlatform()
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+    // Pasar propiedades del sistema a los tests
+    systemProperties = System.properties
 }
 
