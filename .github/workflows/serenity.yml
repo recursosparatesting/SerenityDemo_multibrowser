@@ -35,7 +35,7 @@ jobs:
           cache: 'gradle'
 
       - name: Ejecutar Pruebas Serenity BDD
-        run: ./gradlew clean test -Denvironment=edge
+        run: gradle clean test -Denvironment=edge
 
       - name: Cargar Reporte Serenity (Artifact)
         uses: actions/upload-artifact@v4
