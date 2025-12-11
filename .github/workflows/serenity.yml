@@ -33,6 +33,9 @@ jobs:
             sudo apt-get install -y google-chrome-stable
             google-chrome --version
             
+            #verificar si firefox esta instalado
+            firefox --version
+            
             # Para Edge, necesitamos añadir su repositorio oficial
             sudo apt install curl
             curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
@@ -41,6 +44,7 @@ jobs:
             sudo rm microsoft.gpg
             sudo apt update
             sudo apt install -y microsoft-edge-stable
+            microsoft-edge-stable --version
             echo "Navegadores instalados o verificados."
 
       - name: Checkout del Repositorio
@@ -55,7 +59,7 @@ jobs:
 
       - name: Ejecutar Pruebas Serenity BDD
        # run: clean test aggregate -Denvironment=${{ github.event.inputs.browser }}
-        run: gradle clean test aggregate -Denvironment=edge
+        run: gradle clean test aggregate -Denvironment=msedge
 
       - name: Cargar Reporte Serenity (Artifact)
         uses: actions/upload-artifact@v4
