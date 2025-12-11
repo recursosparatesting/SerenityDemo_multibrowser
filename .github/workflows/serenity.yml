@@ -4,9 +4,21 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+      - master
+    pull_request:
+      branches:
+        - main
+        - master
+
+    workflow_dispatch:
+      inputs:
+        ambiente:
+          description: 'Ambiente de pruebas (ej. dev, qa, prod)'
+          required: true
+          default: 'qa'
+        etiqueta_gradle:
+          description: 'Etiquetas de Serenity a ejecutar (ej. @Regresion)'
+          required: false
 
 jobs:
   build-and-test:
