@@ -1,17 +1,9 @@
 name: Pruebas Orange HRMDemo con Serenity BDD para varios exploradores usando Selenium Manager
 
 on:
-  push:
-    branches:
-      - main
-
-    pull_request:
-      branches:
-        - main
-
     workflow_dispatch:
       inputs:
-        environments:
+        environment:
           description: 'Ambiente con Navegador para ejecución'
           required: true
           default: 'chrome'
@@ -20,6 +12,10 @@ on:
             - edge
             - chrome
             - firefox
+
+    push:
+      branches:
+        - main
 
 jobs:
   build-and-test:
