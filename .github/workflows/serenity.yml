@@ -54,8 +54,9 @@ jobs:
           cache: 'gradle'
 
       - name: Ejecutar Pruebas Serenity BDD
-        run: clean test aggregate -Pambiente=${{ github.event.inputs.ambiente }} -Dserenity.browser=${{ github.event.inputs.browser }}
-
+       # run: clean test aggregate -Denvironment=${{ github.event.inputs.browser }}
+        run: clean test aggregate -Denvironment=edge
+        
       - name: Cargar Reporte Serenity (Artifact)
         uses: actions/upload-artifact@v4
         with:
