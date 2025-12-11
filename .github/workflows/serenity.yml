@@ -59,7 +59,7 @@ jobs:
 
       - name: Ejecutar Pruebas Serenity BDD
        # run: clean test aggregate -Denvironment=${{ github.event.inputs.browser }}
-        run: gradle clean test -Denvironment=edge
+        run: gradle clean test -Denvironment=firefox
 
       - name: Cargar Reporte Serenity (Artifact)
         uses: actions/upload-artifact@v4
