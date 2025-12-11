@@ -11,10 +11,10 @@ on:
 
     workflow_dispatch:
       inputs:
-        browser:
-          description: 'Navegador para ejecución'
+        environments:
+          description: 'Ambiente con Navegador para ejecución'
           required: true
-          default: 'edge'
+          default: 'chrome'
           type: choice
           options:
             - edge
@@ -58,8 +58,8 @@ jobs:
           cache: 'gradle'
 
       - name: Ejecutar Pruebas Serenity BDD
-       # run: clean test aggregate -Denvironment=${{ github.event.inputs.browser }}
-        run: gradle clean test -Denvironment=edge
+        run: gradle clean test aggregate -Denvironment=${{ github.event.inputs.environment }}
+       # run: gradle clean test -Denvironment=edge
 
       - name: Cargar Reporte Serenity (Artifact)
         uses: actions/upload-artifact@v4
