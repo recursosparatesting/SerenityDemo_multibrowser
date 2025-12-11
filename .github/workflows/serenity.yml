@@ -4,21 +4,26 @@ on:
   push:
     branches:
       - main
-      - master
+
     pull_request:
       branches:
         - main
-        - master
 
     workflow_dispatch:
       inputs:
+        browser:
+          description: 'Navegador para ejecución'
+          required: true
+          default: 'edge'
+          type: choice
+          options:
+            - edge
+            - chrome
+            - firefox
         ambiente:
           description: 'Ambiente de pruebas (ej. dev, qa, prod)'
           required: true
           default: 'qa'
-        etiqueta_gradle:
-          description: 'Etiquetas de Serenity a ejecutar (ej. @Regresion)'
-          required: false
 
 jobs:
   build-and-test:
@@ -27,12 +32,23 @@ jobs:
       - name: Checkout del Repositorio
         uses: actions/checkout@v4
 
-      - name: Instalar Google Chrome
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
-          # Opcional: Verifica la versión instalada
-          google-chrome --version
+      - name: Instalar Navegadores (Chrome, Edge, Firefox)
+        run:
+            echo "Instalando navegadores..."
+            sudo apt-get update
+            # instalando chrome
+            sudo apt-get install -y google-chrome-stable
+            google-chrome --version
+            
+            # Para Edge, necesitamos añadir su repositorio oficial
+            sudo apt install curl
+            curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+            sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft-keyring.gpg
+            sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-keyring.gpg] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge.list'
+            sudo rm microsoft.gpg
+            sudo apt update
+            sudo apt install -y microsoft-edge-stable
+            echo "Navegadores instalados o verificados."
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -42,7 +58,7 @@ jobs:
           cache: 'gradle'
 
       - name: Ejecutar Pruebas Serenity BDD
-        run: gradle clean test
+        run: clean test aggregate -Pambiente=${{ github.event.inputs.ambiente }} -Dserenity.browser=${{ github.event.inputs.browser }}
 
       - name: Cargar Reporte Serenity (Artifact)
         uses: actions/upload-artifact@v4
