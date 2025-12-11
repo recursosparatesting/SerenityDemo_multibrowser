@@ -1,58 +1,37 @@
 name: Pruebas Orange HRMDemo con Serenity BDD para varios exploradores usando Selenium Manager
 
-# 1. Definición del Trigger
-# El pipeline se ejecutará cada vez que haya un 'push' o un 'pull_request'
-# a la rama 'main' o 'master'.
 on:
   push:
     branches:
       - main
-      - master
   pull_request:
     branches:
       - main
-      - master
 
-# 2. Definición de los Trabajos (Jobs)
 jobs:
   build-and-test:
-    # 2.1. Configuración del Runner
-    runs-on: ubuntu-latest # Usamos un entorno Linux fresco
-
-    # 2.2. Pasos (Steps)
+    runs-on: ubuntu-latest
     steps:
-      # Paso 1: Checkout del Código
-      # Trae el código del repositorio al runner.
       - name: Checkout del Repositorio
         uses: actions/checkout@v4
 
-      # Paso 2: Configuración de Java
-      # Serenity BDD y Gradle necesitan Java. Configura la versión que uses.
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '17' # Cambia a la versión de Java que requieras (ej. '11', '21')
+          java-version: '17'
           distribution: 'temurin'
-          cache: 'gradle' # Habilita el caché de Gradle para acelerar builds
+          cache: 'gradle'
 
-      # Paso 3: Ejecución de Pruebas con Gradle
-      # El paso crucial. Usa './gradlew' para asegurar la versión correcta.
-      # La tarea 'clean test aggregate' limpia, ejecuta las pruebas y consolida los resultados.
       - name: Ejecutar Pruebas Serenity BDD
-        run: ./gradlew clean test aggregate # Reemplaza 'test aggregate' si usas otra tarea
+        run: ./gradlew clean test -Denvironment=edge
 
-      # Paso 4: Generación y Publicación del Reporte Serenity
-      # Este paso usa la acción 'upload-artifact' para guardar el reporte
-      # de Serenity BDD, que se genera en la carpeta 'target/site/serenity'.
       - name: Cargar Reporte Serenity (Artifact)
         uses: actions/upload-artifact@v4
         with:
-          name: serenity-report-${{ github.sha }} # Nombre único para el reporte
-          path: target/site/serenity # Asegúrate que esta es la ruta de tu reporte
-          retention-days: 7 # Días que el reporte estará disponible en GitHub
+          name: serenity-report-${{ github.sha }}
+          path: target/site/serenity
+          retention-days: 90
           
-      # Paso 5: (Opcional) Publicar Resumen de la Ejecución
-      # Muestra un resumen del estado de la ejecución en la página de Actions.
       - name: Generar Resumen de la Ejecución
         run: |
           echo "### ✅ Pruebas Ejecutadas con Éxito" >> $GITHUB_STEP_SUMMARY
