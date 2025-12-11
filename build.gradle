@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id("net.serenity-bdd.serenity-gradle-plugin") version "4.2.32"
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.14.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.14.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    testImplementation 'net.serenity-bdd:serenity-junit:4.3.1'
+    implementation 'net.serenity-bdd:serenity-core:4.2.32'
+    implementation 'net.serenity-bdd:serenity-cucumber:4.2.32'
+    implementation 'net.serenity-bdd:serenity-screenplay:4.2.32'
+    implementation 'net.serenity-bdd:serenity-screenplay-webdriver:4.2.32'
+    implementation("org.seleniumhq.selenium:selenium-java:4.38.0")
+}
+
+
+test {
+     useJUnitPlatform()
+     finalizedBy(aggregate)
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
