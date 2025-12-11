@@ -1,15 +1,7 @@
 name: Pruebas Orange HRMDemo con Serenity BDD para varios exploradores usando Selenium Manager
 
 on:
-  push:
-    branches:
-      - main
-
-    pull_request:
-      branches:
-        - main
-
-    workflow_dispatch:
+   workflow_dispatch:
       inputs:
         browser:
           description: 'Navegador para ejecución'
@@ -20,10 +12,6 @@ on:
             - edge
             - chrome
             - firefox
-        ambiente:
-          description: 'Ambiente de pruebas (ej. dev, qa, prod)'
-          required: true
-          default: 'qa'
 
 jobs:
   build-and-test:
@@ -32,9 +20,8 @@ jobs:
       - name: Checkout del Repositorio
         uses: actions/checkout@v4
 
-      - name: Instalar Navegadores (Chrome, Edge, Firefox)
-        run:
-            echo "Instalando navegadores..."
+      - name: Instalar Navegadores
+        run: echo "Instalando navegadores..."
             sudo apt-get update
             # instalando chrome
             sudo apt-get install -y google-chrome-stable
