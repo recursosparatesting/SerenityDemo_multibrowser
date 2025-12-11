@@ -25,11 +25,9 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout del Repositorio
-        uses: actions/checkout@v4
-
       - name: Instalar Navegadores
-        run: echo "Instalando navegadores..."
+        run: |
+            echo "Instalando navegadores..."
             sudo apt-get update
             # instalando chrome
             sudo apt-get install -y google-chrome-stable
@@ -44,6 +42,9 @@ jobs:
             sudo apt update
             sudo apt install -y microsoft-edge-stable
             echo "Navegadores instalados o verificados."
+
+      - name: Checkout del Repositorio
+        uses: actions/checkout@v4
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
