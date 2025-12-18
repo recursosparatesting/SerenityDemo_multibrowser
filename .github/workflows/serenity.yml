@@ -13,10 +13,6 @@ on:
             - chrome
             - firefox
 
-    push:
-      branches:
-        - main
-
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
